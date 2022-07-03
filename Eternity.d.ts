@@ -19,3 +19,20 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  * @file
  */
+
+class Store {
+
+}
+
+class Topic {
+
+}
+
+export class Eternity {
+  clientId: string;
+  sessionId: string;
+  instanceId: string;
+
+  getStore(name: string): Store;
+  getTopic(scope: 'client' | 'session' | 'instance', name: string): Topic;
+}
