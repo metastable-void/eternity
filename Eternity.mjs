@@ -150,9 +150,32 @@ class CompatBroadcastChannel extends EventTarget {
   }
 }
 
+export class State {
+  constructor(states) {
+    this.clientState = null;
+    this.sessionState = null;
+    this.instanceState = null;
+    if (firstAid.isObject(states) && 'clientState' in states) {
+      this.clientState = states.clientState;
+    }
+    if (firstAid.isObject(states) && 'sessionState' in states) {
+      this.sessionState = states.sessionState;
+    }
+    if (firstAid.isObject(states) && 'instanceState' in states) {
+      this.instanceState = states.instanceState;
+    }
+  }
+}
 
 class Store {
   //
+  constructor(app, name) {
+    //
+  }
+
+  subscribe(topic, reducer) {
+    //
+  }
 }
 
 class Topic {
@@ -200,8 +223,8 @@ class Topic {
     return this.#name;
   }
 
-  dispatch(data) {
-    this.#broadcastChannel.postMessage(data);
+  dispatch(action) {
+    this.#broadcastChannel.postMessage(action);
   }
 
   addListener(listener) {
@@ -230,6 +253,18 @@ class Topic {
 
 export class Eternity {
   #instanceId;
+
+  static get TOPIC_SCOPE_CLIENT() {
+    return TOPIC_SCOPE_CLIENT;
+  }
+
+  static get TOPIC_SCOPE_SESSION() {
+    return TOPIC_SCOPE_SESSION;
+  }
+
+  static get TOPIC_SCOPE_INSTANCE() {
+    return TOPIC_SCOPE_INSTANCE;
+  }
 
   constructor() {
     this.#instanceId = firstAid.getRandomUuid();

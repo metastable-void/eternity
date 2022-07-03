@@ -20,19 +20,39 @@
  * @file
  */
 
-class Store {
+/**
+ * 
+ */
+export class State {
+  constructor(states?: {clientState?: any, sessionState?: any, instanceState?: any});
+  clientState: any;
+  sessionState: any;
+  instanceState: any;
+}
 
+class Store {
+  subscribe(topic: Topic, reducer: (state: State, action: any) => State);
 }
 
 class Topic {
-
+  scope: TopicScope;
+  name: string;
+  dispatch(action: any);
+  addListener(listener: (action: any) => void);
+  removeListener(listener: (action: any) => void);
 }
 
+type TopicScope = 'client' | 'session' | 'instance';
+
 export class Eternity {
+  static TOPIC_SCOPE_CLIENT: 'client';
+  static TOPIC_SCOPE_SESSION: 'session';
+  static TOPIC_SCOPE_INSTANCE: 'instance';
+
   clientId: string;
   sessionId: string;
   instanceId: string;
 
   getStore(name: string): Store;
-  getTopic(scope: 'client' | 'session' | 'instance', name: string): Topic;
+  getTopic(scope: TopicScope, name: string): Topic;
 }
