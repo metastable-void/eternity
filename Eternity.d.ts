@@ -24,13 +24,13 @@
  * 
  */
 class Store {
-  state: any;
+  readonly state: any;
   subscribe(topic: Topic, reducer: (state: any, action: any) => any);
 }
 
 class Topic {
-  scope: TopicScope;
-  name: string;
+  readonly scope: TopicScope;
+  readonly name: string;
   dispatch(action: any);
   addListener(listener: (action: any) => void);
   removeListener(listener: (action: any) => void);
@@ -39,13 +39,13 @@ class Topic {
 type TopicScope = 'client' | 'session' | 'instance';
 
 export class Eternity {
-  static TOPIC_SCOPE_CLIENT: 'client';
-  static TOPIC_SCOPE_SESSION: 'session';
-  static TOPIC_SCOPE_INSTANCE: 'instance';
+  static readonly TOPIC_SCOPE_CLIENT: 'client';
+  static readonly TOPIC_SCOPE_SESSION: 'session';
+  static readonly TOPIC_SCOPE_INSTANCE: 'instance';
 
-  clientId: string;
-  sessionId: string;
-  instanceId: string;
+  readonly clientId: string;
+  readonly sessionId: string;
+  readonly instanceId: string;
 
   getStore(name: string): Store;
   getTopic(scope: TopicScope, name: string): Topic;
