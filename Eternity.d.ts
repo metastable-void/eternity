@@ -25,15 +25,18 @@
  */
 class Store {
   readonly state: any;
-  subscribe(topic: Topic, reducer: (state: any, action: any) => any);
+  subscribe(topic: Topic, reducer: (state: any, action: any) => any): void;
+  unsubscribe(topic: Topic): void;
+  observe(observer: (state: any) => void): void;
+  unobserve(observer: (state: any) => void): void;
 }
 
 class Topic {
   readonly scope: TopicScope;
   readonly name: string;
-  dispatch(action: any);
-  addListener(listener: (action: any) => void);
-  removeListener(listener: (action: any) => void);
+  dispatch(action: any): void;
+  addListener(listener: (action: any) => void): void;
+  removeListener(listener: (action: any) => void): void;
 }
 
 type TopicScope = 'client' | 'session' | 'instance';

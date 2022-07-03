@@ -237,6 +237,10 @@ class Store {
     }
     this.#observers.delete(observer);
   }
+
+  get [Symbol.toStringTag]() {
+    return 'Store';
+  }
 }
 
 class Topic {
@@ -357,5 +361,9 @@ export class Eternity {
 
   getTopic(scope, name) {
     return new Topic(this, scope, name);
+  }
+
+  get [Symbol.toStringTag]() {
+    return 'Eternity';
   }
 }
