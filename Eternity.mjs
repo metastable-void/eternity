@@ -155,6 +155,8 @@ class Store {
   #storageKey;
   #stateCache;
   #observers = new Set;
+  #topicListeners = {};
+
   constructor(app, name) {
     if ('' === name || 'string' != typeof name) {
       throw new TypeError('Invalid Store name');
@@ -182,7 +184,13 @@ class Store {
     if ('function' != typeof reducer) {
       throw new TypeError('Reducer must be a function');
     }
-    topic.addListener((action) => {
+    const topicKey = String(topic);
+    if (topicKey in this.#topicListeners) {
+      try {
+        topic.removeListener(this.#topicListeners[topicKey]);
+      } catch (e) {}
+    }
+    const listener = this.#topicListeners[topicKey] = (action) => {
       try {
         const newState = reducer(this.state, action);
         const json = JSON.stringify(newState) || this.#stateCache;
@@ -198,7 +206,22 @@ class Store {
       } catch (e) {
         console.error('Error calling reducer:', e);
       }
-    });
+    };
+    topic.addListener(listener);
+  }
+
+  unsubscribe(topic) {
+    if (!(topic instanceof Topic)) {
+      throw new TypeError('Invalid Topic object');
+    }
+    const topicKey = String(topic);
+    if (topicKey in this.#topicListeners) {
+      try {
+        const listener = this.#topicListeners[topicKey];
+        delete this.#topicListeners[topicKey];
+        topic.removeListener(listener);
+      } catch (e) {}
+    }
   }
 
   observe(observer) {
@@ -221,6 +244,7 @@ class Topic {
   #name;
   #broadcastChannel;
   #listenerMap = new WeakMap;
+  #channelName;
 
   constructor(app, scope, name) {
     if (!(app instanceof Eternity)) {
@@ -234,23 +258,26 @@ class Topic {
     }
     this.#scope = scope;
     this.#name = name;
+    let channelName
     switch(scope) {
       case TOPIC_SCOPE_CLIENT: {
-        this.#broadcastChannel = new CompatBroadcastChannel(`topic.client.${app.clientId}.${name}`);
+        channelName =`topic.client.${app.clientId}.${name}`;
         break;
       }
       case TOPIC_SCOPE_SESSION: {
-        this.#broadcastChannel = new CompatBroadcastChannel(`topic.session.${app.sessionId}.${name}`);
+        channelName = `topic.session.${app.sessionId}.${name}`;
         break;
       }
       case TOPIC_SCOPE_INSTANCE: {
-        this.#broadcastChannel = new CompatBroadcastChannel(`topic.instance.${app.instanceId}.${name}`);
+        channelName = `topic.instance.${app.instanceId}.${name}`;
         break;
       }
       default: {
         throw 'This should not happen';
       }
     }
+    this.#channelName = channelName;
+    this.#broadcastChannel = new CompatBroadcastChannel(channelName);
   }
 
   get scope() {
@@ -286,6 +313,10 @@ class Topic {
         this.#broadcastChannel.removeEventListener('message', eventHandler);
       } catch (e) {}
     }
+  }
+
+  toString() {
+    return `Topic(${this.#channelName})`;
   }
 }
 
