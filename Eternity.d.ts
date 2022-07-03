@@ -23,15 +23,9 @@
 /**
  * 
  */
-export class State {
-  constructor(states?: {clientState?: any, sessionState?: any, instanceState?: any});
-  clientState: any;
-  sessionState: any;
-  instanceState: any;
-}
-
 class Store {
-  subscribe(topic: Topic, reducer: (state: State, action: any) => State);
+  state: any;
+  subscribe(topic: Topic, reducer: (state: any, action: any) => any);
 }
 
 class Topic {

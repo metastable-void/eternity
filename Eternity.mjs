@@ -25,6 +25,7 @@ import "./es-first-aid.js";
 const STORAGE_KEY_SESSION_ID = 'menhera.session_id';
 const STORAGE_KEY_CLIENT_ID = 'menhera.client_id';
 const STORAGE_KEY_BROADCAST = 'menhera.broadcast';
+const STORAGE_KEY_PREFIX_STATE = 'menhera.state';
 
 const TOPIC_SCOPE_CLIENT = 'client';
 const TOPIC_SCOPE_SESSION = 'session';
@@ -150,31 +151,68 @@ class CompatBroadcastChannel extends EventTarget {
   }
 }
 
-export class State {
-  constructor(states) {
-    this.clientState = null;
-    this.sessionState = null;
-    this.instanceState = null;
-    if (firstAid.isObject(states) && 'clientState' in states) {
-      this.clientState = states.clientState;
-    }
-    if (firstAid.isObject(states) && 'sessionState' in states) {
-      this.sessionState = states.sessionState;
-    }
-    if (firstAid.isObject(states) && 'instanceState' in states) {
-      this.instanceState = states.instanceState;
-    }
-  }
-}
-
 class Store {
-  //
+  #storageKey;
+  #stateCache;
+  #observers = new Set;
   constructor(app, name) {
-    //
+    if ('' === name || 'string' != typeof name) {
+      throw new TypeError('Invalid Store name');
+    }
+    this.#storageKey = `${STORAGE_KEY_PREFIX_STATE}.${name}`;
+    this.#stateCache = '{}';
+  }
+
+  get state() {
+    try {
+      const json = sessionStorage.getItem(this.#storageKey) || this.#stateCache;
+      const state = JSON.parse(json);
+      this.#stateCache = JSON.stringify(state);
+      return state;
+    } catch (e) {
+      console.error('Error reading sessionStorage:', e);
+      return JSON.parse(this.#stateCache);
+    }
   }
 
   subscribe(topic, reducer) {
-    //
+    if (!(topic instanceof Topic)) {
+      throw new TypeError('Invalid Topic object');
+    }
+    if ('function' != typeof reducer) {
+      throw new TypeError('Reducer must be a function');
+    }
+    topic.addListener((action) => {
+      try {
+        const newState = reducer(this.state, action);
+        const json = JSON.stringify(newState) || this.#stateCache;
+        this.#stateCache = json;
+        for (const observer of this.#observers) {
+          callAsync(observer, this.state);
+        }
+        try {
+          sessionStorage.setItem(this.#storageKey, json);
+        } catch (e) {
+          console.error('Error writing sessionStorage:', e);
+        }
+      } catch (e) {
+        console.error('Error calling reducer:', e);
+      }
+    });
+  }
+
+  observe(observer) {
+    if ('function' != typeof observer) {
+      throw new TypeError('Observer must be a function');
+    }
+    this.#observers.add(observer);
+  }
+
+  unobserve(observer) {
+    if ('function' != typeof observer) {
+      throw new TypeError('Observer must be a function');
+    }
+    this.#observers.delete(observer);
   }
 }
 
@@ -283,7 +321,7 @@ export class Eternity {
   }
 
   getStore(name) {
-    //
+    return new Store(this, name);
   }
 
   getTopic(scope, name) {
