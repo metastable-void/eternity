@@ -229,6 +229,7 @@ class Store {
       throw new TypeError('Observer must be a function');
     }
     this.#observers.add(observer);
+    callAsync(observer, this.state);
   }
 
   unobserve(observer) {
