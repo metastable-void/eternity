@@ -50,6 +50,6 @@ export class Eternity {
   readonly sessionId: string;
   readonly instanceId: string;
 
-  getStore(name: string): Store;
+  getStore(name: string, initializer: (state: any) => any): Store;
   getTopic(scope: TopicScope, name: string): Topic;
 }

@@ -14,20 +14,23 @@ body {
 import {Eternity} from "../Eternity.mjs";
 
 const app = new Eternity;
-const store = app.getStore("store");
+const store = app.getStore("store", (state) => {
+  const value = "value" in state ? state.value : 0;
+  return {
+    value,
+  };
+});
 const decrement = app.getTopic(Eternity.TOPIC_SCOPE_SESSION, "decrement");
 const increment = app.getTopic(Eternity.TOPIC_SCOPE_SESSION, "increment");
 const reset = app.getTopic(Eternity.TOPIC_SCOPE_SESSION, "reset");
 
 store.subscribe(decrement, (state, _action) => {
-  const value = "value" in state ? state.value : 0;
   return {
     value: value - 1,
   };
 });
 
 store.subscribe(increment, (state, _action) => {
-  const value = "value" in state ? state.value : 0;
   return {
     value: value + 1,
   };
@@ -60,7 +63,7 @@ class EternityCounter extends HTMLElement {
     this.#resetButton.textContent = "Reset";
     this.shadowRoot.append(this.#resetButton);
     store.observe((state) => {
-      this.#textContainer.textContent = String(state.value || 0);
+      this.#textContainer.textContent = String(state.value);
     });
     this.#decrementButton.onclick = () => decrement.dispatch(null);
     this.#incrementButton.onclick = () => increment.dispatch(null);

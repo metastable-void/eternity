@@ -157,12 +157,23 @@ class Store {
   #observers = new Set;
   #topicListeners = {};
 
-  constructor(app, name) {
+  constructor(app, name, initializer) {
     if ('' === name || 'string' != typeof name) {
       throw new TypeError('Invalid Store name');
     }
+    if ('function' != typeof initializer) {
+      throw new TypeError('Initializer must be a function');
+    }
     this.#storageKey = `${STORAGE_KEY_PREFIX_STATE}.${name}`;
     this.#stateCache = '{}';
+    const newState = initializer(this.state);
+    const json = JSON.stringify(newState) || this.#stateCache;
+    this.#stateCache = json;
+    try {
+      sessionStorage.setItem(this.#storageKey, json);
+    } catch (e) {
+      console.error('Error writing sessionStorage:', e);
+    }
   }
 
   get state() {
@@ -356,8 +367,8 @@ export class Eternity {
     return this.#instanceId;
   }
 
-  getStore(name) {
-    return new Store(this, name);
+  getStore(name, initializer) {
+    return new Store(this, name, initializer);
   }
 
   getTopic(scope, name) {
