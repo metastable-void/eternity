@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="UTF-8">
+<title>Main</title>
+<style>
+body {
+  margin: 0;
+}
+</style>
+</head>
+<body>
+<script type="module">
+import {Eternity} from "../Eternity.mjs";
+
+const app = new Eternity;
+const store = app.getStore("store");
+const decrement = app.getTopic(Eternity.TOPIC_SCOPE_SESSION, "decrement");
+const increment = app.getTopic(Eternity.TOPIC_SCOPE_SESSION, "increment");
+const reset = app.getTopic(Eternity.TOPIC_SCOPE_SESSION, "reset");
+
+store.subscribe(decrement, (state, _action) => {
+  const value = "value" in state ? state.value : 0;
+  return {
+    value: value - 1,
+  };
+});
+
+store.subscribe(increment, (state, _action) => {
+  const value = "value" in state ? state.value : 0;
+  return {
+    value: value + 1,
+  };
+});
+
+store.subscribe(reset, (state, _action) => {
+  return {
+    value: 0,
+  };
+});
+
+class EternityCounter extends HTMLElement {
+  #decrementButton;
+  #incrementButton;
+  #resetButton;
+  #textContainer;
+
+  constructor() {
+    super();
+    this.attachShadow({mode: "open"});
+    this.#decrementButton = document.createElement("button");
+    this.#decrementButton.textContent = '-';
+    this.shadowRoot.append(decrementButton);
+    this.#textContainer = document.createElement("div");
+    this.shadowRoot.append(this.#textContainer);
+    this.#incrementButton = document.createElement("button");
+    this.#incrementButton.textContent = "+";
+    this.shadowRoot.append(this.#incrementButton);
+    this.#resetButton = document.createElement("button");
+    this.#resetButton.textContent = "Reset";
+    this.shadowRoot.append(this.#resetButton);
+    store.observe((state) => {
+      this.#textContainer.textContent = String(state.value);
+    });
+    this.#decrementButton.onclick = () => decrement.dispatch(null);
+    this.#incrementButton.onclick = () => increment.dispatch(null);
+    this.#resetButton.onclick = () => reset.dispatch(null);
+  }
+}
+customElements.define('eternity-counter', EternityCounter);
+document.body.append(new EternityCounter);
+</script>
+</body>
+</html>
