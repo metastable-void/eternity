@@ -50,7 +50,7 @@ class EternityCounter extends HTMLElement {
     this.attachShadow({mode: "open"});
     this.#decrementButton = document.createElement("button");
     this.#decrementButton.textContent = '-';
-    this.shadowRoot.append(decrementButton);
+    this.shadowRoot.append(this.#decrementButton);
     this.#textContainer = document.createElement("div");
     this.shadowRoot.append(this.#textContainer);
     this.#incrementButton = document.createElement("button");
