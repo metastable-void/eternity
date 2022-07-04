@@ -25,12 +25,14 @@ const increment = app.getTopic(Eternity.TOPIC_SCOPE_SESSION, "increment");
 const reset = app.getTopic(Eternity.TOPIC_SCOPE_SESSION, "reset");
 
 store.subscribe(decrement, (state, _action) => {
+  const {value} = state;
   return {
     value: value - 1,
   };
 });
 
 store.subscribe(increment, (state, _action) => {
+  const {value} = state;
   return {
     value: value + 1,
   };
