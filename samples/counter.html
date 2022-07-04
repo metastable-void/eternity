@@ -60,7 +60,7 @@ class EternityCounter extends HTMLElement {
     this.#resetButton.textContent = "Reset";
     this.shadowRoot.append(this.#resetButton);
     store.observe((state) => {
-      this.#textContainer.textContent = String(state.value);
+      this.#textContainer.textContent = String(state.value || 0);
     });
     this.#decrementButton.onclick = () => decrement.dispatch(null);
     this.#incrementButton.onclick = () => increment.dispatch(null);

@@ -195,13 +195,13 @@ class Store {
         const newState = reducer(this.state, action);
         const json = JSON.stringify(newState) || this.#stateCache;
         this.#stateCache = json;
-        for (const observer of this.#observers) {
-          callAsync(observer, this.state);
-        }
         try {
           sessionStorage.setItem(this.#storageKey, json);
         } catch (e) {
           console.error('Error writing sessionStorage:', e);
+        }
+        for (const observer of this.#observers) {
+          callAsync(observer, this.state);
         }
       } catch (e) {
         console.error('Error calling reducer:', e);
