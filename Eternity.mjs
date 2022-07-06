@@ -172,12 +172,6 @@ const VOID_ELEMENTS = new Set([
  * Roughly `HTMLElement`.
  */
 export class HtmlView {
-  #tagName;
-  #properties = [];
-  #styles = [];
-  #eventListeners = [];
-  #content = [];
-
   /**
    * 
    * @param {string} aText 
@@ -619,6 +613,13 @@ export class HtmlView {
     return new HtmlView('wbr', aAttributes);
   }
 
+  #tagName;
+  #properties = [];
+  #styles = [];
+  #eventListeners = [];
+  #content = [];
+  #key = '';
+
   constructor(tagName, aAttributes, aContent) {
     this.#tagName = String(tagName).toLowerCase(); // SVG and MathML tags are not supported in this view.
     const attributes = [... (aAttributes || [])];
@@ -636,6 +637,8 @@ export class HtmlView {
         this.#styles.push(attribute);
       } else if (attribute instanceof ViewEventListener) {
         this.#eventListeners.push(attribute);
+      } else if (attribute instanceof ViewKey) {
+        this.#key = attribute.key;
       } else {
         throw new TypeError('Invalid ViewAttribute');
       }
@@ -676,6 +679,13 @@ export class HtmlView {
   get eventListeners() {
     return [... this.#eventListeners];
   }
+
+  /**
+   * @returns {string}
+   */
+  get key() {
+    return this.#key;
+  }
 }
 
 export class HtmlText extends HtmlView {
@@ -692,6 +702,10 @@ export class HtmlText extends HtmlView {
 }
 
 export class ViewAttribute {
+  static key(aKey) {
+    return new ViewKey(aKey);
+  }
+
   static style(aProperty, aValue) {
     return new ViewStyle(aProperty, aValue);
   }
@@ -702,6 +716,21 @@ export class ViewAttribute {
 
   static eventListener(aEventName, aListener) {
     return new ViewEventListener(aEventName, aListener);
+  }
+}
+
+export class ViewKey extends ViewAttribute {
+  #key;
+
+  constructor(aKey) {
+    this.#key = String(aKey);
+    if ('' === this.#key) {
+      throw new TypeError('Key cannot be empty');
+    }
+  }
+
+  get key() {
+    return this.#key;
   }
 }
 
