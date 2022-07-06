@@ -811,6 +811,13 @@ export class ViewEventListener extends ViewAttribute {
   }
 }
 
+const render = (element, views) => {
+  if (!(element instanceof HTMLElement)) {
+    throw new TypeError('Not an HTMLElement');
+  }
+  const nodes = element.childNodes;
+};
+
 class Store {
   #storageKey;
   #stateCache;
@@ -908,6 +915,25 @@ class Store {
       throw new TypeError('Observer must be a function');
     }
     this.#observers.delete(observer);
+  }
+
+  /**
+   * 
+   * @param {HTMLElement} element 
+   * @param {(state: any) => [HtmlView]} renderer 
+   */
+  render(element, renderer) {
+    if (!(element instanceof HTMLElement)) {
+      throw new TypeError('Not an HTMLElement');
+    }
+    if ('function' != typeof renderer) {
+      throw new TypeError('Renderer must be a function');
+    }
+
+    this.observe((state) => {
+      const views = [... renderer(state)];
+      render(element, views);
+    });
   }
 
   get [Symbol.toStringTag]() {
