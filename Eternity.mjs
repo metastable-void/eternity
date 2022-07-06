@@ -171,13 +171,18 @@ const VOID_ELEMENTS = new Set([
 /**
  * Roughly `HTMLElement`.
  */
-class HtmlView {
+export class HtmlView {
   #tagName;
   #properties = [];
   #styles = [];
   #eventListeners = [];
   #content = [];
 
+  /**
+   * 
+   * @param {string} aText 
+   * @returns {HtmlText}
+   */
   static text(aText) {
     return new HtmlText(aText);
   }
@@ -673,7 +678,7 @@ class HtmlView {
   }
 }
 
-class HtmlText extends HtmlView {
+export class HtmlText extends HtmlView {
   #text;
 
   constructor(aText) {
@@ -686,11 +691,21 @@ class HtmlText extends HtmlView {
   }
 }
 
-class ViewAttribute {
-  //
+export class ViewAttribute {
+  static style(aProperty, aValue) {
+    return new ViewStyle(aProperty, aValue);
+  }
+
+  static property(aProp, aValue) {
+    return new ViewProperty(aProp, aValue);
+  }
+
+  static eventListener(aEventName, aListener) {
+    return new ViewEventListener(aEventName, aListener);
+  }
 }
 
-class ViewProperty extends ViewAttribute {
+export class ViewProperty extends ViewAttribute {
   #property;
   #value;
 
@@ -715,7 +730,7 @@ class ViewProperty extends ViewAttribute {
   }
 }
 
-class ViewStyle extends ViewAttribute {
+export class ViewStyle extends ViewAttribute {
   #property;
   #value;
 
@@ -740,7 +755,7 @@ class ViewStyle extends ViewAttribute {
   }
 }
 
-class ViewEventListener extends ViewAttribute {
+export class ViewEventListener extends ViewAttribute {
   #eventName;
   #listener;
 
