@@ -614,9 +614,9 @@ export class HtmlView {
   }
 
   #tagName;
-  #properties = [];
-  #styles = [];
-  #eventListeners = [];
+  #properties = {};
+  #styles = {};
+  #eventListeners = {};
   #content = [];
   #key = '';
 
@@ -632,11 +632,11 @@ export class HtmlView {
     }
     for (const attribute of attributes) {
       if (attribute instanceof ViewProperty) {
-        this.#properties.push(attribute);
+        this.#properties[attribute.property] = attribute.value;
       } else if (attribute instanceof ViewStyle) {
-        this.#styles.push(attribute);
+        this.#styles[attribute.property] = attribute.value;
       } else if (attribute instanceof ViewEventListener) {
-        this.#eventListeners.push(attribute);
+        this.#eventListeners[attribute.eventName] = attribute.listener;
       } else if (attribute instanceof ViewKey) {
         this.#key = attribute.key;
       } else {
@@ -660,24 +660,32 @@ export class HtmlView {
   }
 
   /**
-   * @returns {[ViewProperty]}
+   * @returns {{[property: string]: string}}
    */
   get properties() {
-    return [... this.#properties];
+    const properties = {};
+    for (const prop of Object.getOwnPropertyNames(this.#properties).sort()) {
+      properties[prop] = String(this.#properties[prop]);
+    }
+    return properties;
   }
 
   /**
-   * @returns {[ViewStyle]}
+   * @returns {{[property: string]: string}}
    */
   get styles() {
-    return [... this.#styles];
+    const styles = {};
+    for (const prop of Object.getOwnPropertyNames(this.#styles).sort()) {
+      styles[prop] = String(this.#styles[prop]);
+    }
+    return styles;
   }
 
   /**
-   * @returns {[ViewEventListener]}
+   * @returns {{[eventName: string]: ViewEventListener}}
    */
   get eventListeners() {
-    return [... this.#eventListeners];
+    return {... this.#eventListeners};
   }
 
   /**
@@ -811,11 +819,24 @@ export class ViewEventListener extends ViewAttribute {
   }
 }
 
+const registeredEventListeners = new WeakMap;
 const render = (element, views) => {
   if (!(element instanceof HTMLElement)) {
     throw new TypeError('Not an HTMLElement');
   }
   const nodes = element.childNodes;
+  for (const node of nodes) {
+    if (node instanceof HTMLElement) {
+      const eventListeners = registeredEventListeners.get(node);
+      if (eventListeners) {
+        for (const eventName of Object.getOwnPropertyNames(eventListeners)) {
+          try {
+            node.removeEventListener(eventName, eventListeners[eventName]);
+          } catch (e) {}
+        }
+      }
+    }
+  }
 };
 
 class Store {
