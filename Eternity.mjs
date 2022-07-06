@@ -151,6 +151,622 @@ class CompatBroadcastChannel extends EventTarget {
   }
 }
 
+const VOID_ELEMENTS = new Set([
+  'area',
+  'base',
+  'br',
+  'col',
+  'embed',
+  'hr',
+  'img',
+  'input',
+  'link',
+  'meta',
+  'param',
+  'source',
+  'track',
+  'wbr',
+]);
+
+/**
+ * Roughly `HTMLElement`.
+ */
+class HtmlView {
+  #tagName;
+  #properties = [];
+  #styles = [];
+  #eventListeners = [];
+  #content = [];
+
+  static text(aText) {
+    return new HtmlText(aText);
+  }
+
+  static a(aAttributes, aContent) {
+    return new HtmlView('a', aAttributes, aContent);
+  }
+
+  static abbr(aAttributes, aContent) {
+    return new HtmlView('abbr', aAttributes, aContent);
+  }
+
+  static address(aAttributes, aContent) {
+    return new HtmlView('address', aAttributes, aContent);
+  }
+
+  static area(aAttributes) {
+    return new HtmlView('area', aAttributes);
+  }
+
+  static article(aAttributes, aContent) {
+    return new HtmlView('article', aAttributes, aContent);
+  }
+
+  static aside(aAttributes, aContent) {
+    return new HtmlView('aside', aAttributes, aContent);
+  }
+
+  static audio(aAttributes, aContent) {
+    return new HtmlView('audio', aAttributes, aContent);
+  }
+
+  static b(aAttributes, aContent) {
+    return new HtmlView('b', aAttributes, aContent);
+  }
+
+  static base(aAttributes) {
+    return new HtmlView('base', aAttributes);
+  }
+
+  static bdi(aAttributes, aContent) {
+    return new HtmlView('bdi', aAttributes, aContent);
+  }
+
+  static bdo(aAttributes, aContent) {
+    return new HtmlView('bdo', aAttributes, aContent);
+  }
+
+  static blockquote(aAttributes, aContent) {
+    return new HtmlView('blockquote', aAttributes, aContent);
+  }
+
+  static body(aAttributes, aContent) {
+    return new HtmlView('body', aAttributes, aContent);
+  }
+
+  static br(aAttributes) {
+    return new HtmlView('br', aAttributes);
+  }
+
+  static button(aAttributes, aContent) {
+    return new HtmlView('button', aAttributes, aContent);
+  }
+
+  static canvas(aAttributes, aContent) {
+    return new HtmlView('canvas', aAttributes, aContent);
+  }
+
+  static caption(aAttributes, aContent) {
+    return new HtmlView('caption', aAttributes, aContent);
+  }
+
+  static cite(aAttributes, aContent) {
+    return new HtmlView('cite', aAttributes, aContent);
+  }
+
+  static code(aAttributes, aContent) {
+    return new HtmlView('code', aAttributes, aContent);
+  }
+
+  static col(aAttributes) {
+    return new HtmlView('col', aAttributes);
+  }
+
+  static colgroup(aAttributes, aContent) {
+    return new HtmlView('colgroup', aAttributes, aContent);
+  }
+
+  static command(aAttributes, aContent) {
+    return new HtmlView('command', aAttributes, aContent);
+  }
+
+  static datalist(aAttributes, aContent) {
+    return new HtmlView('datalist', aAttributes, aContent);
+  }
+
+  static dd(aAttributes, aContent) {
+    return new HtmlView('dd', aAttributes, aContent);
+  }
+
+  static del(aAttributes, aContent) {
+    return new HtmlView('del', aAttributes, aContent);
+  }
+
+  static details(aAttributes, aContent) {
+    return new HtmlView('details', aAttributes, aContent);
+  }
+
+  static dfn(aAttributes, aContent) {
+    return new HtmlView('dfn', aAttributes, aContent);
+  }
+
+  static dialog(aAttributes, aContent) {
+    return new HtmlView('dialog', aAttributes, aContent);
+  }
+
+  static div(aAttributes, aContent) {
+    return new HtmlView('div', aAttributes, aContent);
+  }
+
+  static dl(aAttributes, aContent) {
+    return new HtmlView('dl', aAttributes, aContent);
+  }
+
+  static dt(aAttributes, aContent) {
+    return new HtmlView('dt', aAttributes, aContent);
+  }
+
+  static em(aAttributes, aContent) {
+    return new HtmlView('em', aAttributes, aContent);
+  }
+
+  static embed(aAttributes) {
+    return new HtmlView('embed', aAttributes);
+  }
+
+  static fieldset(aAttributes, aContent) {
+    return new HtmlView('fieldset', aAttributes, aContent);
+  }
+
+  static figcaption(aAttributes, aContent) {
+    return new HtmlView('figcaption', aAttributes, aContent);
+  }
+
+  static figure(aAttributes, aContent) {
+    return new HtmlView('figure', aAttributes, aContent);
+  }
+
+  static footer(aAttributes, aContent) {
+    return new HtmlView('footer', aAttributes, aContent);
+  }
+
+  static form(aAttributes, aContent) {
+    return new HtmlView('form', aAttributes, aContent);
+  }
+
+  static h1(aAttributes, aContent) {
+    return new HtmlView('h1', aAttributes, aContent);
+  }
+
+  static h2(aAttributes, aContent) {
+    return new HtmlView('h2', aAttributes, aContent);
+  }
+
+  static h3(aAttributes, aContent) {
+    return new HtmlView('h3', aAttributes, aContent);
+  }
+
+  static h4(aAttributes, aContent) {
+    return new HtmlView('h4', aAttributes, aContent);
+  }
+
+  static h5(aAttributes, aContent) {
+    return new HtmlView('h5', aAttributes, aContent);
+  }
+
+  static h6(aAttributes, aContent) {
+    return new HtmlView('h6', aAttributes, aContent);
+  }
+
+  static head(aAttributes, aContent) {
+    return new HtmlView('head', aAttributes, aContent);
+  }
+
+  static header(aAttributes, aContent) {
+    return new HtmlView('header', aAttributes, aContent);
+  }
+
+  static hr(aAttributes) {
+    return new HtmlView('hr', aAttributes);
+  }
+
+  static html(aAttributes, aContent) {
+    return new HtmlView('html', aAttributes, aContent);
+  }
+
+  static i(aAttributes, aContent) {
+    return new HtmlView('i', aAttributes, aContent);
+  }
+
+  static iframe(aAttributes, aContent) {
+    return new HtmlView('iframe', aAttributes, aContent);
+  }
+
+  static img(aAttributes) {
+    return new HtmlView('img', aAttributes);
+  }
+
+  static input(aAttributes) {
+    return new HtmlView('input', aAttributes);
+  }
+
+  static ins(aAttributes, aContent) {
+    return new HtmlView('ins', aAttributes, aContent);
+  }
+
+  static kbd(aAttributes, aContent) {
+    return new HtmlView('kbd', aAttributes, aContent);
+  }
+
+  static label(aAttributes, aContent) {
+    return new HtmlView('label', aAttributes, aContent);
+  }
+
+  static legend(aAttributes, aContent) {
+    return new HtmlView('legend', aAttributes, aContent);
+  }
+
+  static li(aAttributes, aContent) {
+    return new HtmlView('li', aAttributes, aContent);
+  }
+
+  static link(aAttributes) {
+    return new HtmlView('link', aAttributes);
+  }
+
+  static main(aAttributes, aContent) {
+    return new HtmlView('main', aAttributes, aContent);
+  }
+
+  static map(aAttributes, aContent) {
+    return new HtmlView('map', aAttributes, aContent);
+  }
+
+  static mark(aAttributes, aContent) {
+    return new HtmlView('mark', aAttributes, aContent);
+  }
+
+  static menu(aAttributes, aContent) {
+    return new HtmlView('menu', aAttributes, aContent);
+  }
+
+  static menuitem(aAttributes, aContent) {
+    return new HtmlView('menuitem', aAttributes, aContent);
+  }
+
+  static meta(aAttributes) {
+    return new HtmlView('meta', aAttributes);
+  }
+
+  static meter(aAttributes, aContent) {
+    return new HtmlView('meter', aAttributes, aContent);
+  }
+
+  static nav(aAttributes, aContent) {
+    return new HtmlView('nav', aAttributes, aContent);
+  }
+
+  static noscript(aAttributes, aContent) {
+    return new HtmlView('noscript', aAttributes, aContent);
+  }
+
+  static object(aAttributes, aContent) {
+    return new HtmlView('object', aAttributes, aContent);
+  }
+
+  static ol(aAttributes, aContent) {
+    return new HtmlView('ol', aAttributes, aContent);
+  }
+
+  static optgroup(aAttributes, aContent) {
+    return new HtmlView('optgroup', aAttributes, aContent);
+  }
+
+  static option(aAttributes, aContent) {
+    return new HtmlView('option', aAttributes, aContent);
+  }
+
+  static output(aAttributes, aContent) {
+    return new HtmlView('output', aAttributes, aContent);
+  }
+
+  static p(aAttributes, aContent) {
+    return new HtmlView('p', aAttributes, aContent);
+  }
+
+  static param(aAttributes) {
+    return new HtmlView('param', aAttributes);
+  }
+
+  static pre(aAttributes, aContent) {
+    return new HtmlView('pre', aAttributes, aContent);
+  }
+
+  static progress(aAttributes, aContent) {
+    return new HtmlView('progress', aAttributes, aContent);
+  }
+
+  static q(aAttributes, aContent) {
+    return new HtmlView('q', aAttributes, aContent);
+  }
+
+  static rp(aAttributes, aContent) {
+    return new HtmlView('rp', aAttributes, aContent);
+  }
+
+  static rt(aAttributes, aContent) {
+    return new HtmlView('rt', aAttributes, aContent);
+  }
+
+  static ruby(aAttributes, aContent) {
+    return new HtmlView('ruby', aAttributes, aContent);
+  }
+
+  static samp(aAttributes, aContent) {
+    return new HtmlView('samp', aAttributes, aContent);
+  }
+
+  static script(aAttributes, aContent) {
+    return new HtmlView('script', aAttributes, aContent);
+  }
+
+  static section(aAttributes, aContent) {
+    return new HtmlView('section', aAttributes, aContent);
+  }
+
+  static select(aAttributes, aContent) {
+    return new HtmlView('select', aAttributes, aContent);
+  }
+
+  static small(aAttributes, aContent) {
+    return new HtmlView('small', aAttributes, aContent);
+  }
+
+  static source(aAttributes) {
+    return new HtmlView('source', aAttributes);
+  }
+
+  static span(aAttributes, aContent) {
+    return new HtmlView('span', aAttributes, aContent);
+  }
+
+  static strong(aAttributes, aContent) {
+    return new HtmlView('strong', aAttributes, aContent);
+  }
+
+  static style(aAttributes, aContent) {
+    return new HtmlView('style', aAttributes, aContent);
+  }
+
+  static sub(aAttributes, aContent) {
+    return new HtmlView('sub', aAttributes, aContent);
+  }
+
+  static summary(aAttributes, aContent) {
+    return new HtmlView('summary', aAttributes, aContent);
+  }
+
+  static sup(aAttributes, aContent) {
+    return new HtmlView('sup', aAttributes, aContent);
+  }
+
+  static table(aAttributes, aContent) {
+    return new HtmlView('table', aAttributes, aContent);
+  }
+
+  static tbody(aAttributes, aContent) {
+    return new HtmlView('tbody', aAttributes, aContent);
+  }
+
+  static td(aAttributes, aContent) {
+    return new HtmlView('td', aAttributes, aContent);
+  }
+
+  static textarea(aAttributes, aContent) {
+    return new HtmlView('textarea', aAttributes, aContent);
+  }
+
+  static tfoot(aAttributes, aContent) {
+    return new HtmlView('tfoot', aAttributes, aContent);
+  }
+
+  static th(aAttributes, aContent) {
+    return new HtmlView('th', aAttributes, aContent);
+  }
+
+  static thead(aAttributes, aContent) {
+    return new HtmlView('thead', aAttributes, aContent);
+  }
+
+  static time(aAttributes, aContent) {
+    return new HtmlView('time', aAttributes, aContent);
+  }
+
+  static title(aAttributes, aContent) {
+    return new HtmlView('title', aAttributes, aContent);
+  }
+
+  static tr(aAttributes, aContent) {
+    return new HtmlView('tr', aAttributes, aContent);
+  }
+
+  static track(aAttributes) {
+    return new HtmlView('track', aAttributes);
+  }
+
+  static u(aAttributes, aContent) {
+    return new HtmlView('u', aAttributes, aContent);
+  }
+
+  static ul(aAttributes, aContent) {
+    return new HtmlView('ul', aAttributes, aContent);
+  }
+
+  static var(aAttributes, aContent) {
+    return new HtmlView('var', aAttributes, aContent);
+  }
+
+  static video(aAttributes, aContent) {
+    return new HtmlView('video', aAttributes, aContent);
+  }
+
+  static wbr(aAttributes) {
+    return new HtmlView('wbr', aAttributes);
+  }
+
+  constructor(tagName, aAttributes, aContent) {
+    this.#tagName = String(tagName).toLowerCase(); // SVG and MathML tags are not supported in this view.
+    const attributes = [... (aAttributes || [])];
+    const content = VOID_ELEMENTS.has(this.#tagName) ? [] : [... (aContent || [])];
+    for (const view of content) {
+      if (!(view instanceof HtmlView)) {
+        throw new TypeError('Not an HtmlView');
+      }
+      this.#content.push(view);
+    }
+    for (const attribute of attributes) {
+      if (attribute instanceof ViewProperty) {
+        this.#properties.push(attribute);
+      } else if (attribute instanceof ViewStyle) {
+        this.#styles.push(attribute);
+      } else if (attribute instanceof ViewEventListener) {
+        this.#eventListeners.push(attribute);
+      } else {
+        throw new TypeError('Invalid ViewAttribute');
+      }
+    }
+  }
+
+  /**
+   * @returns {string}
+   */
+  get tagName() {
+    return this.#tagName;
+  }
+
+  /**
+   * @returns {[HtmlView]}
+   */
+  get content() {
+    return [... this.#content];
+  }
+
+  /**
+   * @returns {[ViewProperty]}
+   */
+  get properties() {
+    return [... this.#properties];
+  }
+
+  /**
+   * @returns {[ViewStyle]}
+   */
+  get styles() {
+    return [... this.#styles];
+  }
+
+  /**
+   * @returns {[ViewEventListener]}
+   */
+  get eventListeners() {
+    return [... this.#eventListeners];
+  }
+}
+
+class HtmlText extends HtmlView {
+  #text;
+
+  constructor(aText) {
+    super('#text', [], []);
+    this.#text = String(aText);
+  }
+
+  get text() {
+    return this.#text;
+  }
+}
+
+class ViewAttribute {
+  //
+}
+
+class ViewProperty extends ViewAttribute {
+  #property;
+  #value;
+
+  constructor(aProperty, aValue) {
+    super();
+    this.#property = String(aProperty);
+    this.#value = String(aValue);
+  }
+
+  /**
+   * @returns {string}
+   */
+  get property() {
+    return this.#property;
+  }
+
+  /**
+   * @returns {string}
+   */
+  get value() {
+    return this.#value;
+  }
+}
+
+class ViewStyle extends ViewAttribute {
+  #property;
+  #value;
+
+  constructor(aProperty, aValue) {
+    super();
+    this.#property = String(aProperty);
+    this.#value = String(aValue);
+  }
+
+  /**
+   * @returns {string}
+   */
+  get property() {
+    return this.#property;
+  }
+
+  /**
+   * @returns {string}
+   */
+  get value() {
+    return this.#value;
+  }
+}
+
+class ViewEventListener extends ViewAttribute {
+  #eventName;
+  #listener;
+
+  constructor(aEventName, aListener) {
+    if ('function' != typeof aListener) {
+      throw new TypeError('listener must be a function');
+    }
+    this.#eventName = String(aEventName);
+    this.#listener = aListener;
+  }
+
+  /**
+   * @returns {string}
+   */
+  get eventName() {
+    return this.#eventName;
+  }
+
+  /**
+   * @returns {function}
+   */
+  get listener() {
+    return this.#listener;
+  }
+}
+
 class Store {
   #storageKey;
   #stateCache;
