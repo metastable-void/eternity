@@ -856,6 +856,7 @@ export class ViewClassSet extends ViewProperty {
   #classSet;
 
   constructor(aClasses) {
+    super();
     this.#classSet = new Set([... (aClasses || [])].map((className) => String(className)).sort());
   }
 
