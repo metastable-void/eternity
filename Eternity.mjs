@@ -852,6 +852,7 @@ const render = (element, aViews) => {
         found = true;
         foundIndex = i;
         prevNode = node;
+        console.log('Found: tagName: %s, key: %s', view.tagName, view.key);
         if (node.nodeName == '#text' && view instanceof HtmlText) {
           node.textContent = view.text;
         } else if (node instanceof HTMLElement) {
@@ -921,6 +922,7 @@ const render = (element, aViews) => {
         registeredEventListeners.set(newNode, newEventListeners);
         render(newNode, view.content);
       }
+      console.log('Inserted: tagName: %s, key: %s', view.tagName, view.key);
     }
   }
   if (prevNode instanceof Node) {
