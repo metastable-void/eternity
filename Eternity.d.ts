@@ -276,7 +276,7 @@ export class HtmlText extends HtmlView {
 export class ViewProperty {
   static key(aKey: string): ViewKey;
   static style(aProperty: string, aValue: string): ViewStyle;
-  static property(aProperty: string, aValue: string): ViewAttribute;
+  static attribute(aProperty: string, aValue: string): ViewAttribute;
   static eventListener(aEventName: string, aListener: Function): ViewEventListener;
 }
 

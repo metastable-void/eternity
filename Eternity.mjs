@@ -718,7 +718,7 @@ export class ViewProperty {
     return new ViewStyle(aProperty, aValue);
   }
 
-  static property(aProp, aValue) {
+  static attribute(aProp, aValue) {
     return new ViewAttribute(aProp, aValue);
   }
 

@@ -46,6 +46,7 @@ store.render(document.body, (state) => {
         ], [EH.text('First')]),
         EH.button([EP.eventListener('click', () => second.dispatch(null))], [EH.text('Second')]),
         EH.text('Displaying: First'),
+        EH.input([EP.attribute('type', 'number')]),
       ];
     }
 
@@ -58,6 +59,7 @@ store.render(document.body, (state) => {
           EP.style('color', 'red'),
         ], [EH.text('Second')]),
         EH.text('Displaying: Second'),
+        EH.input([EP.attribute('type', 'number')]),
       ];
     }
 
@@ -66,6 +68,7 @@ store.render(document.body, (state) => {
         EH.button([EP.eventListener('click', () => first.dispatch(null))], [EH.text('First')]),
         EH.button([EP.eventListener('click', () => second.dispatch(null))], [EH.text('Second')]),
         EH.text('Error'),
+        EH.input([EP.attribute('type', 'number')]),
       ];
     }
   }
