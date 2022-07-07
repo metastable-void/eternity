@@ -39,6 +39,7 @@ store.render(document.body, (state) => {
   switch (state.value) {
     case 0: {
       return [
+        EH.p([EA.key('paragraph', [EH.text('First')]),
         EH.button([
           EA.eventListener('click', () => first.dispatch(null)),
           EA.style('color', 'red'),
