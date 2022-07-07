@@ -836,7 +836,7 @@ const render = (element, aViews) => {
     throw new TypeError('Not an HTMLElement');
   }
   const views = [... aViews];
-  const nodes = element.childNodes;
+  const nodes = [... element.childNodes];
   let nodeIndex = 0;
   let prevNode = null;
   for (const view of views) {
