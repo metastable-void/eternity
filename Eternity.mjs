@@ -731,6 +731,7 @@ export class ViewKey extends ViewAttribute {
   #key;
 
   constructor(aKey) {
+    super();
     this.#key = String(aKey);
     if ('' === this.#key) {
       throw new TypeError('Key cannot be empty');
@@ -797,6 +798,7 @@ export class ViewEventListener extends ViewAttribute {
   #listener;
 
   constructor(aEventName, aListener) {
+    super();
     if ('function' != typeof aListener) {
       throw new TypeError('listener must be a function');
     }
