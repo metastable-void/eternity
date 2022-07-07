@@ -820,21 +820,104 @@ export class ViewEventListener extends ViewAttribute {
 }
 
 const registeredEventListeners = new WeakMap;
-const render = (element, views) => {
+const keyMap = new WeakMap;
+const render = (element, aVIews) => {
   if (!(element instanceof HTMLElement)) {
     throw new TypeError('Not an HTMLElement');
   }
+  const views = [... aViews];
   const nodes = element.childNodes;
-  for (const node of nodes) {
-    if (node instanceof HTMLElement) {
-      const eventListeners = registeredEventListeners.get(node);
-      if (eventListeners) {
-        for (const eventName of Object.getOwnPropertyNames(eventListeners)) {
-          try {
-            node.removeEventListener(eventName, eventListeners[eventName]);
-          } catch (e) {}
+  let nodeIndex = 0;
+  let prevNode = null;
+  for (const view of views) {
+    if (!(view instanceof HtmlView)) {
+      throw new TypeError('Not an HtmlView');
+    }
+    let found = false;
+    let foundIndex = -1;
+    for (let i = nodeIndex; i < nodes.length; i++) {
+      const node = nodes[i];
+      const nodeKey = keyMap.get(node) || '';
+      if (node.nodeName.toLowerCase() == view.tagName && nodeKey == view.key) {
+        found = true;
+        foundIndex = i;
+        prevNode = node;
+        if (node.nodeName == '#text' && view instanceof HtmlText) {
+          node.textContent = view.text;
+        } else if (node instanceof HTMLElement) {
+          const eventListeners = registeredEventListeners.get(node);
+          if (eventListeners) {
+            for (const eventName of Object.getOwnPropertyNames(eventListeners)) {
+              try {
+                node.removeEventListener(eventName, eventListeners[eventName]);
+              } catch (e) {}
+            }
+          }
+          for (const attribute of node.attributes) {
+            node.removeAttributeNode(attribute);
+          }
+          const attributes = view.properties;
+          for (const attr of Object.getOwnPropertyNames(attributes)) {
+            node.setAttribute(attr, attributes[attr]);
+          }
+          const newEventListeners = view.eventListeners;
+          for (const eventName of Object.getOwnPropertyNames(newEventListeners)) {
+            node.addEventListener(eventName, newEventListeners[eventName]);
+          }
+          registeredEventListeners.set(node, newEventListeners);
+          render(nodes, view.content);
+        }
+        break;
+      }
+    }
+    if (found) {
+      for (let i = nodeIndex; i < foundIndex; i++) {
+        element.removeChild(nodes[i]);
+      }
+      nodeIndex = foundIndex + 1;
+    } else {
+      let newNode;
+      if (view instanceof HtmlText) {
+        newNode = document.createTextNode(view.text);
+      } else {
+        newNode = document.createElement(view.tagName);
+        const attributes = view.properties;
+        for (const attr of Object.getOwnPropertyNames(attributes)) {
+          newNode.setAttribute(attr, attributes[attr]);
         }
       }
+      if (prevNode instanceof Node) {
+        if (prevNode.nextSibling instanceof Node) {
+          element.insertBefore(newNode, prevNode.nextSibling)
+        } else {
+          element.appendChild(newNode);
+        }
+      } else if (element.firstChild instanceof Node) {
+        element.insertBefore(newNode, element.firstChild);
+      } else {
+        element.appendChild(newNode);
+      }
+      prevNode = newNode;
+      if (newNode instanceof HTMLElement) {
+        const newEventListeners = view.eventListeners;
+        for (const eventName of Object.getOwnPropertyNames(newEventListeners)) {
+          newNode.addEventListener(eventName, newEventListeners[eventName]);
+        }
+        registeredEventListeners(newNode, newEventListeners);
+        render(newNode, view.content);
+      }
+    }
+  }
+  if (prevNode instanceof Node) {
+    let nextNode = prevNode.nextSibling;
+    while (nextNode instanceof Node) {
+      const node = nextNode;
+      nextNode = nextNode.nextSibling;
+      element.removeChild(node);
+    }
+  } else if (views.length < 1) {
+    for (const node of element.childNodes) {
+      element.removeChild(node);
     }
   }
 };
@@ -952,7 +1035,8 @@ class Store {
     }
 
     this.observe((state) => {
-      const views = [... renderer(state)];
+      const result = renderer(state);
+      const views = result instanceof HtmlView ? [result] : [... result];
       render(element, views);
     });
   }
