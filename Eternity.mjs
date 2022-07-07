@@ -819,8 +819,16 @@ export class ViewEventListener extends ViewAttribute {
   }
 }
 
+/**
+ * @type {WeakMap<HTMLElement, {[eventName: string]: ViewEventListener}}
+ */
 const registeredEventListeners = new WeakMap;
+
+/**
+ * @type {WeakMap<HTMLElement, string>}
+ */
 const keyMap = new WeakMap;
+
 const render = (element, aVIews) => {
   if (!(element instanceof HTMLElement)) {
     throw new TypeError('Not an HTMLElement');
@@ -885,6 +893,9 @@ const render = (element, aVIews) => {
         for (const attr of Object.getOwnPropertyNames(attributes)) {
           newNode.setAttribute(attr, attributes[attr]);
         }
+        if (view.key) {
+          keyMap.set(newNode, view.key);
+        }
       }
       if (prevNode instanceof Node) {
         if (prevNode.nextSibling instanceof Node) {
@@ -903,7 +914,7 @@ const render = (element, aVIews) => {
         for (const eventName of Object.getOwnPropertyNames(newEventListeners)) {
           newNode.addEventListener(eventName, newEventListeners[eventName]);
         }
-        registeredEventListeners(newNode, newEventListeners);
+        registeredEventListeners.set(newNode, newEventListeners);
         render(newNode, view.content);
       }
     }
