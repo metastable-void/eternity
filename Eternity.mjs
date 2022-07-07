@@ -631,7 +631,7 @@ export class HtmlView {
       this.#content.push(view);
     }
     for (const attribute of attributes) {
-      if (attribute instanceof ViewProperty) {
+      if (attribute instanceof ViewAttribute) {
         this.#properties[attribute.property] = attribute.value;
       } else if (attribute instanceof ViewStyle) {
         this.#styles[attribute.property] = attribute.value;
@@ -662,7 +662,7 @@ export class HtmlView {
   /**
    * @returns {{[property: string]: string}}
    */
-  get properties() {
+  get attributes() {
     const properties = {};
     for (const prop of Object.getOwnPropertyNames(this.#properties).sort()) {
       properties[prop] = String(this.#properties[prop]);
@@ -709,7 +709,7 @@ export class HtmlText extends HtmlView {
   }
 }
 
-export class ViewAttribute {
+export class ViewProperty {
   static key(aKey) {
     return new ViewKey(aKey);
   }
@@ -719,7 +719,7 @@ export class ViewAttribute {
   }
 
   static property(aProp, aValue) {
-    return new ViewProperty(aProp, aValue);
+    return new ViewAttribute(aProp, aValue);
   }
 
   static eventListener(aEventName, aListener) {
@@ -727,7 +727,7 @@ export class ViewAttribute {
   }
 }
 
-export class ViewKey extends ViewAttribute {
+export class ViewKey extends ViewProperty {
   #key;
 
   constructor(aKey) {
@@ -743,7 +743,7 @@ export class ViewKey extends ViewAttribute {
   }
 }
 
-export class ViewProperty extends ViewAttribute {
+export class ViewAttribute extends ViewProperty {
   #property;
   #value;
 
@@ -768,7 +768,7 @@ export class ViewProperty extends ViewAttribute {
   }
 }
 
-export class ViewStyle extends ViewAttribute {
+export class ViewStyle extends ViewProperty {
   #property;
   #value;
 
@@ -793,7 +793,7 @@ export class ViewStyle extends ViewAttribute {
   }
 }
 
-export class ViewEventListener extends ViewAttribute {
+export class ViewEventListener extends ViewProperty {
   #eventName;
   #listener;
 
@@ -864,7 +864,7 @@ const render = (element, aViews) => {
               } catch (e) {}
             }
           }
-          const attributes = view.properties;
+          const attributes = view.attributes;
           for (const attribute of node.attributes) {
             if (!(attribute.name in attributes)) {
               node.removeAttributeNode(attribute);
@@ -906,7 +906,7 @@ const render = (element, aViews) => {
         newNode = document.createTextNode(view.text);
       } else {
         newNode = document.createElement(view.tagName);
-        const attributes = view.properties;
+        const attributes = view.attributes;
         for (const attr of Object.getOwnPropertyNames(attributes)) {
           newNode.setAttribute(attr, attributes[attr]);
         }
@@ -1060,7 +1060,7 @@ class Store {
   /**
    * 
    * @param {HTMLElement} element 
-   * @param {(state: any) => [HtmlView]} renderer 
+   * @param {(state: any) => (HtmlView | [HtmlView])} renderer 
    */
   render(element, renderer) {
     if (!(element instanceof HTMLElement)) {

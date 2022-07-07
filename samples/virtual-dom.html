@@ -11,7 +11,7 @@ body {
 </head>
 <body>
 <script type="module">
-import {HtmlView as EH, ViewAttribute as EA, Eternity} from "../Eternity.mjs";
+import {HtmlView as EH, ViewProperty as EP, Eternity} from "../Eternity.mjs";
 
 const app = new Eternity;
 const store = app.getStore("store", (state) => {
@@ -39,12 +39,12 @@ store.render(document.body, (state) => {
   switch (state.value) {
     case 0: {
       return [
-        EH.p([EA.key('paragraph')], [EH.text('First')]),
+        EH.p([EP.key('paragraph')], [EH.text('First')]),
         EH.button([
-          EA.eventListener('click', () => first.dispatch(null)),
-          EA.style('color', 'red'),
+          EP.eventListener('click', () => first.dispatch(null)),
+          EP.style('color', 'red'),
         ], [EH.text('First')]),
-        EH.button([EA.eventListener('click', () => second.dispatch(null))], [EH.text('Second')]),
+        EH.button([EP.eventListener('click', () => second.dispatch(null))], [EH.text('Second')]),
         EH.text('Displaying: First'),
       ];
     }
@@ -52,10 +52,10 @@ store.render(document.body, (state) => {
     case 1: {
       return [
         EH.h1([], [EH.text('Second!')]),
-        EH.button([EA.eventListener('click', () => first.dispatch(null))], [EH.text('First')]),
+        EH.button([EP.eventListener('click', () => first.dispatch(null))], [EH.text('First')]),
         EH.button([
-          EA.eventListener('click', () => second.dispatch(null)),
-          EA.style('color', 'red'),
+          EP.eventListener('click', () => second.dispatch(null)),
+          EP.style('color', 'red'),
         ], [EH.text('Second')]),
         EH.text('Displaying: Second'),
       ];
@@ -63,8 +63,8 @@ store.render(document.body, (state) => {
 
     default: {
       return [
-        EH.button([EA.eventListener('click', () => first.dispatch(null))], [EH.text('First')]),
-        EH.button([EA.eventListener('click', () => second.dispatch(null))], [EH.text('Second')]),
+        EH.button([EP.eventListener('click', () => first.dispatch(null))], [EH.text('First')]),
+        EH.button([EP.eventListener('click', () => second.dispatch(null))], [EH.text('Second')]),
         EH.text('Error'),
       ];
     }

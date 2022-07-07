@@ -29,7 +29,7 @@ export class Store {
   unsubscribe(topic: Topic): void;
   observe(observer: (state: any) => void): void;
   unobserve(observer: (state: any) => void): void;
-  render(element: HTMLElement, renderer: (state: any) => ([HtmlView] | HtmlView));
+  render(element: HTMLElement, renderer: (state: any) => ([HtmlView] | HtmlView)): void;
 }
 
 export class Topic {
@@ -45,221 +45,221 @@ type TopicScope = 'client' | 'session' | 'instance';
 export class HtmlView {
   static text(aText: string): HtmlText;
 
-  static a(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static a(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static abbr(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static abbr(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static address(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static address(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static area(aAttriibutes: [ViewAttribute]): HtmlView;
+  static area(aAttriibutes: [ViewProperty]): HtmlView;
 
-  static article(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static article(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static aside(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static aside(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static audio(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static audio(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static b(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static b(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static base(aAttriibutes: [ViewAttribute]): HtmlView;
+  static base(aAttriibutes: [ViewProperty]): HtmlView;
 
-  static bdi(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static bdi(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static bdo(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static bdo(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static blockquote(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static blockquote(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static body(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static body(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static br(aAttriibutes: [ViewAttribute]): HtmlView;
+  static br(aAttriibutes: [ViewProperty]): HtmlView;
 
-  static button(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static button(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static canvas(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static canvas(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static caption(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static caption(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static cite(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static cite(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static code(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static code(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static col(aAttriibutes: [ViewAttribute]): HtmlView;
+  static col(aAttriibutes: [ViewProperty]): HtmlView;
 
-  static colgroup(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static colgroup(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static command(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static command(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static datalist(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static datalist(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static dd(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static dd(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static del(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static del(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static details(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static details(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static dfn(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static dfn(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static dialog(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static dialog(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static div(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static div(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static dl(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static dl(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static dt(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static dt(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static em(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static em(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static embed(aAttriibutes: [ViewAttribute]): HtmlView;
+  static embed(aAttriibutes: [ViewProperty]): HtmlView;
 
-  static fieldset(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static fieldset(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static figcaption(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static figcaption(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static figure(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static figure(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static footer(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static footer(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static form(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static form(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static h1(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static h1(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static h2(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static h2(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static h3(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static h3(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static h4(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static h4(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static h5(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static h5(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static h6(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static h6(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static head(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static head(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static header(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static header(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static hr(aAttriibutes: [ViewAttribute]): HtmlView;
+  static hr(aAttriibutes: [ViewProperty]): HtmlView;
 
-  static html(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static html(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static i(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static i(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static iframe(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static iframe(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static img(aAttriibutes: [ViewAttribute]): HtmlView;
+  static img(aAttriibutes: [ViewProperty]): HtmlView;
 
-  static input(aAttriibutes: [ViewAttribute]): HtmlView;
+  static input(aAttriibutes: [ViewProperty]): HtmlView;
 
-  static ins(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static ins(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static kbd(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static kbd(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static label(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static label(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static legend(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static legend(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static li(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static li(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static link(aAttriibutes: [ViewAttribute]): HtmlView;
+  static link(aAttriibutes: [ViewProperty]): HtmlView;
 
-  static main(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static main(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static map(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static map(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static mark(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static mark(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static menu(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static menu(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static menuitem(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static menuitem(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static meta(aAttriibutes: [ViewAttribute]): HtmlView;
+  static meta(aAttriibutes: [ViewProperty]): HtmlView;
 
-  static meter(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static meter(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static nav(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static nav(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static noscript(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static noscript(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static object(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static object(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static ol(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static ol(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static optgroup(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static optgroup(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static option(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static option(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static output(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static output(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static p(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static p(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static param(aAttriibutes: [ViewAttribute]): HtmlView;
+  static param(aAttriibutes: [ViewProperty]): HtmlView;
 
-  static pre(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static pre(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static progress(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static progress(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static q(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static q(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static rp(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static rp(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static rt(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static rt(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static ruby(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static ruby(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static samp(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static samp(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static script(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static script(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static section(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static section(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static select(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static select(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static small(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static small(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static source(aAttriibutes: [ViewAttribute]): HtmlView;
+  static source(aAttriibutes: [ViewProperty]): HtmlView;
 
-  static span(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static span(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static strong(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static strong(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static style(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static style(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static sub(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static sub(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static summary(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static summary(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static sup(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static sup(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static table(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static table(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static tbody(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static tbody(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static td(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static td(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static textarea(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static textarea(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static tfoot(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static tfoot(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static th(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static th(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static thead(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static thead(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static time(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static time(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static title(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static title(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static tr(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static tr(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static track(aAttriibutes: [ViewAttribute]): HtmlView;
+  static track(aAttriibutes: [ViewProperty]): HtmlView;
 
-  static u(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static u(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static ul(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static ul(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static var(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static var(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static video(aAttriibutes: [ViewAttribute], aContent: [HtmlView]): HtmlView;
+  static video(aAttriibutes: [ViewProperty], aContent: [HtmlView]): HtmlView;
 
-  static wbr(aAttriibutes: [ViewAttribute]): HtmlView;
+  static wbr(aAttriibutes: [ViewProperty]): HtmlView;
 
   readonly tagName: string;
   readonly content: [HtmlView];
@@ -273,28 +273,28 @@ export class HtmlText extends HtmlView {
   readonly text: string;
 }
 
-export class ViewAttribute {
+export class ViewProperty {
   static key(aKey: string): ViewKey;
   static style(aProperty: string, aValue: string): ViewStyle;
-  static property(aProperty: string, aValue: string): ViewProperty;
+  static property(aProperty: string, aValue: string): ViewAttribute;
   static eventListener(aEventName: string, aListener: Function): ViewEventListener;
 }
 
-export class ViewKey extends ViewAttribute {
+export class ViewKey extends ViewProperty {
   readonly key: string;
 }
 
-export class ViewProperty extends ViewAttribute {
+export class ViewAttribute extends ViewProperty {
   readonly property: string;
   readonly value: string;
 }
 
-export class ViewStyle extends ViewAttribute {
+export class ViewStyle extends ViewProperty {
   readonly property: string;
   readonly value: string;
 }
 
-export class ViewEventListener extends ViewAttribute {
+export class ViewEventListener extends ViewProperty {
   readonly eventName: string;
   readonly listener: Function;
 }
