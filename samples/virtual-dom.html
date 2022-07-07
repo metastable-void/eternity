@@ -39,7 +39,10 @@ store.render(document.body, (state) => {
   switch (state.value) {
     case 0: {
       return [
-        EH.button([EA.eventListener('click', () => first.dispatch(null))], [EH.text('First')]),
+        EH.button([
+          EA.eventListener('click', () => first.dispatch(null)),
+          EA.style('color', 'red'),
+        ], [EH.text('First')]),
         EH.button([EA.eventListener('click', () => second.dispatch(null))], [EH.text('Second')]),
         EH.text('Displaying: First'),
       ];
@@ -48,7 +51,10 @@ store.render(document.body, (state) => {
     case 1: {
       return [
         EH.button([EA.eventListener('click', () => first.dispatch(null))], [EH.text('First')]),
-        EH.button([EA.eventListener('click', () => second.dispatch(null))], [EH.text('Second')]),
+        EH.button([
+          EA.eventListener('click', () => second.dispatch(null)),
+          EA.style('color', 'red'),
+        ], [EH.text('Second')]),
         EH.text('Displaying: Second'),
       ];
     }

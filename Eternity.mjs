@@ -878,6 +878,15 @@ const render = (element, aViews) => {
             node.addEventListener(eventName, newEventListeners[eventName]);
           }
           registeredEventListeners.set(node, newEventListeners);
+          const newStyle = view.styles;
+          for (const prop of node.style) {
+            if (!(prop in newStyle)) {
+              node.style.removeProperty(prop);
+            }
+          }
+          for (const prop of Object.getOwnPropertyNames(newStyle)) {
+            node.style.setProperty(prop, newStyle[prop]);
+          }
           render(node, view.content);
         }
         break;
@@ -917,6 +926,10 @@ const render = (element, aViews) => {
         element.appendChild(newNode);
       }
       prevNode = newNode;
+      const newStyle = view.styles;
+      for (const prop of Object.getOwnPropertyNames(newStyle)) {
+        newNode.style.setProperty(prop, newStyle[prop]);
+      }
       console.log('Inserted: tagName: %s, key: %s', view.tagName, view.key);
       if (newNode instanceof HTMLElement) {
         const newEventListeners = view.eventListeners;
