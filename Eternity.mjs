@@ -619,6 +619,8 @@ export class HtmlView {
   #eventListeners = {};
   #content = [];
   #key = '';
+  #dataset = {};
+  #classSet = new Set;
 
   constructor(tagName, aAttributes, aContent) {
     this.#tagName = String(tagName).toLowerCase(); // SVG and MathML tags are not supported in this view.
@@ -637,6 +639,12 @@ export class HtmlView {
         this.#styles[attribute.property] = attribute.value;
       } else if (attribute instanceof ViewEventListener) {
         this.#eventListeners[attribute.eventName] = attribute.listener;
+      } else if (attribute instanceof ViewData) {
+        this.#dataset[attribute.property] = attribute.value;
+      } else if (attribute instanceof ViewClassSet) {
+        for (const className of attribute) {
+          this.#classSet.add(className);
+        }
       } else if (attribute instanceof ViewKey) {
         this.#key = attribute.key;
       } else {
@@ -689,6 +697,20 @@ export class HtmlView {
   }
 
   /**
+   * @returns {{[property: string]: string}}
+   */
+  get dataset() {
+    return {... this.#dataset};
+  }
+
+  /**
+   * @returns {[string]}
+   */
+  get classes() {
+    return [... this.#classSet];
+  }
+
+  /**
    * @returns {string}
    */
   get key() {
@@ -718,6 +740,14 @@ export class ViewProperty {
     return new ViewStyle(aProperty, aValue);
   }
 
+  static data(aProperty, aValue) {
+    return new ViewData(aProperty, aValue);
+  }
+
+  static classes(aClasses) {
+    return new ViewClassSet(aClasses);
+  }
+
   static attribute(aProp, aValue) {
     return new ViewAttribute(aProp, aValue);
   }
@@ -744,6 +774,35 @@ export class ViewKey extends ViewProperty {
 }
 
 export class ViewAttribute extends ViewProperty {
+  static id(aId) {
+    return new ViewAttribute('id', aId);
+  }
+
+  #property;
+  #value;
+
+  constructor(aProperty, aValue) {
+    super();
+    this.#property = String(aProperty);
+    this.#value = String(aValue);
+  }
+
+  /**
+   * @returns {string}
+   */
+  get property() {
+    return this.#property;
+  }
+
+  /**
+   * @returns {string}
+   */
+  get value() {
+    return this.#value;
+  }
+}
+
+export class ViewData extends ViewProperty {
   #property;
   #value;
 
@@ -790,6 +849,20 @@ export class ViewStyle extends ViewProperty {
    */
   get value() {
     return this.#value;
+  }
+}
+
+export class ViewClassSet extends ViewProperty {
+  #classSet;
+
+  constructor(aClasses) {
+    this.#classSet = new Set([... (aClasses || [])].map((className) => String(className)).sort());
+  }
+
+  *[Symbol.iterator]() {
+    for (const className of this.#classSet) {
+      yield className;
+    }
   }
 }
 
@@ -864,6 +937,24 @@ const render = (element, aViews) => {
               } catch (e) {}
             }
           }
+          const classes = view.classes;
+          for (const className of node.classList) {
+            if (!classes.includes(className)) {
+              node.classList.remove(className);
+            }
+          }
+          for (const className of classes) {
+            node.classList.add(className);
+          }
+          const dataset = view.dataset;
+          for (const prop in node.dataset) {
+            if (!(prop in dataset)) {
+              delete node.dataset[prop];
+            }
+          }
+          for (const prop of Object.getOwnPropertyNames(dataset)) {
+            node.dataset[prop] = dataset[prop];
+          }
           const attributes = view.attributes;
           for (const attribute of node.attributes) {
             if (!(attribute.name in attributes)) {
@@ -906,6 +997,14 @@ const render = (element, aViews) => {
         newNode = document.createTextNode(view.text);
       } else {
         newNode = document.createElement(view.tagName);
+        const classes = view.classes;
+        for (const className of classes) {
+          newNode.classList.add(className);
+        }
+        const dataset = view.dataset;
+        for (const prop of Object.getOwnPropertyNames(dataset)) {
+          newNode.dataset[prop] = dataset[prop];
+        }
         const attributes = view.attributes;
         for (const attr of Object.getOwnPropertyNames(attributes)) {
           newNode.setAttribute(attr, attributes[attr]);
@@ -926,12 +1025,12 @@ const render = (element, aViews) => {
         element.appendChild(newNode);
       }
       prevNode = newNode;
-      const newStyle = view.styles;
-      for (const prop of Object.getOwnPropertyNames(newStyle)) {
-        newNode.style.setProperty(prop, newStyle[prop]);
-      }
       console.log('Inserted: tagName: %s, key: %s', view.tagName, view.key);
       if (newNode instanceof HTMLElement) {
+        const newStyle = view.styles;
+        for (const prop of Object.getOwnPropertyNames(newStyle)) {
+          newNode.style.setProperty(prop, newStyle[prop]);
+        }
         const newEventListeners = view.eventListeners;
         for (const eventName of Object.getOwnPropertyNames(newEventListeners)) {
           newNode.addEventListener(eventName, newEventListeners[eventName]);

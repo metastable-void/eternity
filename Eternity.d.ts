@@ -266,6 +266,8 @@ export class HtmlView {
   readonly properties: {[property: string]: string};
   readonly styles: {[property: string]: string};
   readonly eventListeners: {[eventName: string]: Function};
+  readonly dataset: {[property: string]: string};
+  readonly classes: [string];
   readonly key: string;
 }
 
@@ -276,6 +278,8 @@ export class HtmlText extends HtmlView {
 export class ViewProperty {
   static key(aKey: string): ViewKey;
   static style(aProperty: string, aValue: string): ViewStyle;
+  static data(aProperty: string, aValue: string): ViewData;
+  static classes(aClasses: Iterable<string>): ViewClassSet;
   static attribute(aProperty: string, aValue: string): ViewAttribute;
   static eventListener(aEventName: string, aListener: Function): ViewEventListener;
 }
@@ -285,8 +289,19 @@ export class ViewKey extends ViewProperty {
 }
 
 export class ViewAttribute extends ViewProperty {
+  static id(aId: string): ViewAttribute;
+
   readonly property: string;
   readonly value: string;
+}
+
+export class ViewData extends ViewProperty {
+  readonly property: string;
+  readonly value: string;
+}
+
+export class ViewClassSet extends ViewProperty {
+  [Symbol.iterator](): Iterator<string>;
 }
 
 export class ViewStyle extends ViewProperty {
