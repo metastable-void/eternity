@@ -877,7 +877,7 @@ const render = (element, aViews) => {
             node.addEventListener(eventName, newEventListeners[eventName]);
           }
           registeredEventListeners.set(node, newEventListeners);
-          render(nodes, view.content);
+          render(node, view.content);
         }
         break;
       }
