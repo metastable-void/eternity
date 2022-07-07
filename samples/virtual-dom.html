@@ -50,6 +50,7 @@ store.render(document.body, (state) => {
 
     case 1: {
       return [
+        EH.h1([], [EH.text('Second!')]),
         EH.button([EA.eventListener('click', () => first.dispatch(null))], [EH.text('First')]),
         EH.button([
           EA.eventListener('click', () => second.dispatch(null)),
