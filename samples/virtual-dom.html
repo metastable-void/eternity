@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="UTF-8">
+<title>Main</title>
+<style>
+body {
+  margin: 0;
+}
+</style>
+</head>
+<body>
+<script type="module">
+import {HtmlView as EH, ViewAttribute as EA, Eternity} from "../Eternity.mjs";
+
+const app = new Eternity;
+const store = app.getStore("store", (state) => {
+  const value = "value" in state ? state.value : 0;
+  return {
+    value,
+  };
+});
+const first = app.getTopic(Eternity.TOPIC_SCOPE_SESSION, "first");
+const second = app.getTopic(Eternity.TOPIC_SCOPE_SESSION, "second");
+
+store.subscribe(first, (state, _action) => {
+  return {
+    value: 0,
+  };
+});
+
+store.subscribe(second, (state, _action) => {
+  return {
+    value: 1,
+  };
+});
+
+store.render(document.body, (state) => {
+  switch (state.value) {
+    case 0: {
+      return [
+        EH.button([EA.eventListener('click', () => first.dispatch(null))], [EH.text('First')]),
+        EH.button([EA.eventListener('click', () => second.dispatch(null))], [EH.text('Second')]),
+        EH.text('Displaying: First'),
+      ];
+    }
+
+    case 1: {
+      return [
+        EH.button([EA.eventListener('click', () => first.dispatch(null))], [EH.text('First')]),
+        EH.button([EA.eventListener('click', () => second.dispatch(null))], [EH.text('Second')]),
+        EH.text('Displaying: Second'),
+      ];
+    }
+
+    default: {
+      return [
+        EH.button([EA.eventListener('click', () => first.dispatch(null))], [EH.text('First')]),
+        EH.button([EA.eventListener('click', () => second.dispatch(null))], [EH.text('Second')]),
+        EH.text('Error'),
+      ];
+    }
+  }
+});
+
+</script>
+</body>
+</html>
