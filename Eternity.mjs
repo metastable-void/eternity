@@ -831,7 +831,7 @@ const registeredEventListeners = new WeakMap;
  */
 const keyMap = new WeakMap;
 
-const render = (element, aVIews) => {
+const render = (element, aViews) => {
   if (!(element instanceof HTMLElement)) {
     throw new TypeError('Not an HTMLElement');
   }
