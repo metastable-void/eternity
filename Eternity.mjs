@@ -861,10 +861,12 @@ const render = (element, aVIews) => {
               } catch (e) {}
             }
           }
-          for (const attribute of node.attributes) {
-            node.removeAttributeNode(attribute);
-          }
           const attributes = view.properties;
+          for (const attribute of node.attributes) {
+            if (!(attribute.name in attributes)) {
+              node.removeAttributeNode(attribute);
+            }
+          }
           for (const attr of Object.getOwnPropertyNames(attributes)) {
             node.setAttribute(attr, attributes[attr]);
           }
