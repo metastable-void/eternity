@@ -852,7 +852,7 @@ const render = (element, aViews) => {
         found = true;
         foundIndex = i;
         prevNode = node;
-        console.log('Found: tagName: %s, key: %s', view.tagName, view.key);
+        console.log('Found at %d: searched from index %d, tagName: %s, key: %s', i, nodeIndex, view.tagName, view.key);
         if (node.nodeName == '#text' && view instanceof HtmlText) {
           node.textContent = view.text;
         } else if (node instanceof HTMLElement) {
@@ -884,9 +884,12 @@ const render = (element, aViews) => {
       }
     }
     if (found) {
+      let removedNodes = 0;
       for (let i = nodeIndex; i < foundIndex; i++) {
         element.removeChild(nodes[i]);
+        removedNodes++;
       }
+      console.log('Removed %d nodes from index: %d', removedNodes, nodeIndex);
       nodeIndex = foundIndex + 1;
     } else {
       let newNode;
@@ -914,6 +917,7 @@ const render = (element, aViews) => {
         element.appendChild(newNode);
       }
       prevNode = newNode;
+      console.log('Inserted: tagName: %s, key: %s', view.tagName, view.key);
       if (newNode instanceof HTMLElement) {
         const newEventListeners = view.eventListeners;
         for (const eventName of Object.getOwnPropertyNames(newEventListeners)) {
@@ -922,16 +926,18 @@ const render = (element, aViews) => {
         registeredEventListeners.set(newNode, newEventListeners);
         render(newNode, view.content);
       }
-      console.log('Inserted: tagName: %s, key: %s', view.tagName, view.key);
     }
   }
   if (prevNode instanceof Node) {
     let nextNode = prevNode.nextSibling;
+    let removedNodes = 0;
     while (nextNode instanceof Node) {
       const node = nextNode;
       nextNode = nextNode.nextSibling;
       element.removeChild(node);
+      removedNodes++;
     }
+    console.log('Removed %d nodes at the end', removedNodes);
   } else if (views.length < 1) {
     for (const node of element.childNodes) {
       element.removeChild(node);
