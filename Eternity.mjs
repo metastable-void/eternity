@@ -682,7 +682,7 @@ export class HtmlView {
   }
 
   /**
-   * @returns {{[eventName: string]: ViewEventListener}}
+   * @returns {{[eventName: string]: function}}
    */
   get eventListeners() {
     return {... this.#eventListeners};
