@@ -14,7 +14,7 @@ body {
 import {HtmlView as EH, ViewProperty as EP, Eternity} from "../Eternity.mjs";
 
 const app = new Eternity;
-const store = app.getStore("store", (state) => {
+const store = app.getStore("virtual-dom", (state) => {
   const value = "value" in state ? state.value : 0;
   return {
     value,
