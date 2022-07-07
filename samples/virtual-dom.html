@@ -43,6 +43,8 @@ store.render(document.body, (state) => {
         EH.button([
           EP.eventListener('click', () => first.dispatch(null)),
           EP.style('color', 'red'),
+          EP.classes(['red']),
+          EP.data('fooBar', 'value'),
         ], [EH.text('First')]),
         EH.button([EP.eventListener('click', () => second.dispatch(null))], [EH.text('Second')]),
         EH.text('Displaying: First'),
@@ -57,6 +59,8 @@ store.render(document.body, (state) => {
         EH.button([
           EP.eventListener('click', () => second.dispatch(null)),
           EP.style('color', 'red'),
+          EP.classes(['red']),
+          EP.data('fooBar', 'value'),
         ], [EH.text('Second')]),
         EH.text('Displaying: Second'),
         EH.input([EP.attribute('type', 'number')]),
