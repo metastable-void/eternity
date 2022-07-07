@@ -938,6 +938,15 @@ const render = (element, aViews) => {
               } catch (e) {}
             }
           }
+          const attributes = view.attributes;
+          for (const attribute of node.attributes) {
+            if (!(attribute.name in attributes)) {
+              node.removeAttributeNode(attribute);
+            }
+          }
+          for (const attr of Object.getOwnPropertyNames(attributes)) {
+            node.setAttribute(attr, attributes[attr]);
+          }
           const classes = view.classes;
           for (const className of node.classList) {
             if (!classes.includes(className)) {
@@ -955,15 +964,6 @@ const render = (element, aViews) => {
           }
           for (const prop of Object.getOwnPropertyNames(dataset)) {
             node.dataset[prop] = dataset[prop];
-          }
-          const attributes = view.attributes;
-          for (const attribute of node.attributes) {
-            if (!(attribute.name in attributes)) {
-              node.removeAttributeNode(attribute);
-            }
-          }
-          for (const attr of Object.getOwnPropertyNames(attributes)) {
-            node.setAttribute(attr, attributes[attr]);
           }
           const newEventListeners = view.eventListeners;
           for (const eventName of Object.getOwnPropertyNames(newEventListeners)) {
@@ -998,6 +998,10 @@ const render = (element, aViews) => {
         newNode = document.createTextNode(view.text);
       } else {
         newNode = document.createElement(view.tagName);
+        const attributes = view.attributes;
+        for (const attr of Object.getOwnPropertyNames(attributes)) {
+          newNode.setAttribute(attr, attributes[attr]);
+        }
         const classes = view.classes;
         for (const className of classes) {
           newNode.classList.add(className);
@@ -1005,10 +1009,6 @@ const render = (element, aViews) => {
         const dataset = view.dataset;
         for (const prop of Object.getOwnPropertyNames(dataset)) {
           newNode.dataset[prop] = dataset[prop];
-        }
-        const attributes = view.attributes;
-        for (const attr of Object.getOwnPropertyNames(attributes)) {
-          newNode.setAttribute(attr, attributes[attr]);
         }
         if (view.key) {
           keyMap.set(newNode, view.key);
