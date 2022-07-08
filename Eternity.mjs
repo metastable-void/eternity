@@ -926,7 +926,7 @@ const render = (element, aViews) => {
         found = true;
         foundIndex = i;
         prevNode = node;
-        console.log('Found at %d: searched from index %d, tagName: %s, key: %s', i, nodeIndex, view.tagName, view.key);
+        //console.log('Found at %d: searched from index %d, tagName: %s, key: %s', i, nodeIndex, view.tagName, view.key);
         if (node.nodeName == '#text' && view instanceof HtmlText) {
           node.textContent = view.text;
         } else if (node instanceof HTMLElement) {
@@ -990,7 +990,7 @@ const render = (element, aViews) => {
         element.removeChild(nodes[i]);
         removedNodes++;
       }
-      console.log('Removed %d nodes from index: %d', removedNodes, nodeIndex);
+      //console.log('Removed %d nodes from index: %d', removedNodes, nodeIndex);
       nodeIndex = foundIndex + 1;
     } else {
       let newNode;
@@ -1026,7 +1026,7 @@ const render = (element, aViews) => {
         element.appendChild(newNode);
       }
       prevNode = newNode;
-      console.log('Inserted: tagName: %s, key: %s', view.tagName, view.key);
+      //console.log('Inserted: tagName: %s, key: %s', view.tagName, view.key);
       if (newNode instanceof HTMLElement) {
         const newStyle = view.styles;
         for (const prop of Object.getOwnPropertyNames(newStyle)) {
@@ -1050,7 +1050,7 @@ const render = (element, aViews) => {
       element.removeChild(node);
       removedNodes++;
     }
-    console.log('Removed %d nodes at the end', removedNodes);
+    //console.log('Removed %d nodes at the end', removedNodes);
   } else if (views.length < 1) {
     for (const node of element.childNodes) {
       element.removeChild(node);
