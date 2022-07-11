@@ -1,0 +1,34 @@
+<!-- -*- indent-tabs-mode: nil; tab-width: 2; -*- -->
+<!-- vim: set ts=2 sw=2 et ai : -->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="UTF-8">
+<title>Main</title>
+<style>
+body {
+  margin: 0;
+}
+</style>
+</head>
+<body>
+<input type="range" min="0" max="100">
+<input type="number" readonly>
+<script type="module">
+import {LocalStorageData, Eternity} from "../Eternity.mjs";
+
+const inputRange = document.querySelector('input[type="range"]');
+const inputNumber = document.querySelector('input[type="number"]');
+
+const number = new LocalStorageData('example.storage.number', () => 0);
+number.observe((number) => {
+  inputRange.value = number;
+  inputNumber.value = number;
+});
+
+inputRange.addEventListener('change', (ev) => {
+  number.setValue(+inputRange.value);
+});
+</script>
+</body>
+</html>

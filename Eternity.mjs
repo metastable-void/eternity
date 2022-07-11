@@ -1306,3 +1306,97 @@ export class Eternity {
     return 'Eternity';
   }
 }
+
+export class LocalStorageData {
+  #key;
+  #data;
+  #observers = new Set;
+
+  constructor(aKey, aInitializer) {
+    if ('function' != typeof aInitializer) {
+      throw new TypeError('Initializer must be a function');
+    }
+    this.#key = String(aKey);
+    let json;
+    try {
+      json = localStorage.getItem(this.#key);
+      if (!json) {
+        json = JSON.stringify(aInitializer());
+        localStorage.setItem(this.#key, json);
+      }
+      this.#data = json;
+    } catch (e) {
+      console.error(e);
+      this.#data = JSON.stringify(aInitializer());
+    }
+    window.addEventListener('storage', (ev) => {
+      //
+      if (ev.key != this.#key) {
+        return;
+      }
+      if (localStorage != ev.storageArea) {
+        return;
+      }
+      const newValue = ev.newValue;
+      if (null == newValue) {
+        return;
+      }
+      try {
+        JSON.parse(newValue); // test if throws
+        this.#data = newValue;
+        for (const observer of this.#observers) {
+          callAsync(observer, this.getValue());
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    });
+  }
+
+  getValue() {
+    try {
+      const json = localStorage.getItem(this.#key);
+      const data = JSON.parse(json);
+      this.#data = json;
+      return data;
+    } catch (e) {
+      try {
+        localStorage.setItem(this.#key, this.#data);
+      } catch (e) {}
+      const data = JSON.parse(this.#data);
+      return data;
+    }
+  }
+
+  setValue(aValue) {
+    const json = JSON.stringify(aValue);
+    this.#data = json;
+    try {
+      localStorage.setItem(this.#key, json);
+    } catch (e) {
+      console.error(e);
+    }
+    for (const observer of this.#observers) {
+      callAsync(observer, this.getValue());
+    }
+  }
+
+  observe(aObserver) {
+    if ('function' != typeof aObserver) {
+      throw new TypeError('Observer must be a function');
+    }
+    this.#observers.add(aObserver);
+    callAsync(aObserver, this.getValue());
+  }
+
+  unobserve(aObserver) {
+    if ('function' != typeof aObserver) {
+      throw new TypeError('Observer must be a function');
+    }
+    this.#observers.delete(aObserver);
+  }
+
+  get key() {
+    return this.#key;
+  }
+}
