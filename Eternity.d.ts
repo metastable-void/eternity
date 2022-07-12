@@ -23,7 +23,7 @@
 /**
  * 
  */
-export class Store {
+interface Store {
   readonly state: any;
   subscribe(topic: Topic, reducer: (state: any, action: any) => any): void;
   unsubscribe(topic: Topic): void;
@@ -32,7 +32,7 @@ export class Store {
   render(element: HTMLElement, renderer: (state: any) => ([HtmlView] | HtmlView)): void;
 }
 
-export class Topic {
+interface Topic {
   readonly scope: TopicScope;
   readonly name: string;
   dispatch(action: any): void;
@@ -325,4 +325,14 @@ export class Eternity {
 
   getStore(name: string, initializer: (state: any) => any): Store;
   getTopic(scope: TopicScope, name: string): Topic;
+}
+
+export class LocalStorageData<T> {
+  readonly key: string;
+
+  constructor(aKey: string, aInitializer: () => T);
+  getValue(): T;
+  setValue(aValue: T): void;
+  observe(aObserver: (value: T) => void): void;
+  unobserve(aObserver: (value: T) => void): void;
 }
