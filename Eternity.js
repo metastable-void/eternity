@@ -40,6 +40,7 @@ const TOPIC_SCOPES = new Set([
  * 
  * @param callback {function}
  * @param args {any[]}
+ * @deprecated
  */
  const callAsync = (callback, ... args) => {
   Promise.resolve()
@@ -47,6 +48,26 @@ const TOPIC_SCOPES = new Set([
   .catch(e => console.error(e));
 };
 
+/**
+ * 
+ * @param callback {function}
+ * @param args {any[]}
+ */
+const callTruelyAsync = (callback, ... args) => 
+  new Promise((res) => setTimeout(res, 0)).then(() => callback(... args));
+
+/**
+ * 
+ * @param callback {function}
+ * @param args {any[]}
+ */
+const callMaybeAsync = (callback, ... args) => {
+  try {
+    return Promise.resolve(callback(... args));
+  } catch (e) {
+    return Promise.reject(e);
+  }
+};
 
 let clientIdCache = null;
 
